@@ -13,7 +13,15 @@ function createProduct(req, res) {
         .then(product => res.status(200).json(_.omit(product.toObject(), 'ownerId')));
 }
 
+function deleteProuct(req, res) {
+    Product.deleteOne({ _id: req.params.id })
+        .then(result => {
+            result.n ? res.status(204).send() : res.status(500).send();
+        });
+}
+
 module.exports = {
     getProducts,
-    createProduct
+    createProduct,
+    deleteProuct
 }
