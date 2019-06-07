@@ -10,7 +10,8 @@ const productSchema = mongoose.Schema({
     ownerId: { required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     title: { required: true, type: String },
     description: { required: true, type: String },
-    status: { required: true, type: String, default: productStatuses.pending }
+    status: { required: true, type: String, default: productStatuses.pending },
+    keywords: { required: false, type: Array }
 });
 const Product = mongoose.model('Product', productSchema);
 
