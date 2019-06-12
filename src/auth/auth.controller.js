@@ -34,7 +34,12 @@ function login(req, res) {
     })
 }
 
+function me(req, res) {
+    User.findById(req.userId).then(user => res.json(_.omit(user.toObject(), 'password')));
+}
+
 module.exports = {
     register,
     login,
+    me
 }
