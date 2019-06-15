@@ -6,9 +6,13 @@ const userSchema = mongoose.Schema({
     lastName: { required: true, type: String },
     email: { required: true, type: String },
     password: { required: true, type: String },
-    isAdmin: { required: true, type: Boolean, default: false }
+    isAdmin: { required: true, type: Boolean, default: false },
+    avatarUrl: { required: false, type: String },
+    address: { required: false, type: String },
+    phone: { required: false, type: Number },
+    agree: { required: false, type: Boolean }
 });
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = User; 

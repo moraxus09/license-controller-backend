@@ -15,7 +15,7 @@ function register(req, res) {
             return res.sendStatus(500);
         }
         const token = jwt.sign({ id: user._id }, config.secret, { expiresIn: 86400 });
-        res.status(200).send({token, user: _.omit(user.toObject(), ['password', 'isAdmin'])});
+        res.status(200).send({token, user: _.omit(user.toObject(), ['password', 'isAdmin', '__v'])});
     });
 }
 
@@ -29,17 +29,34 @@ function login(req, res) {
             return res.sendStatus(422);
         } else {
             const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, config.secret, { expiresIn: 86400 });
-            return res.status(200).send({ token, user: _.omit(user.toObject(), 'password')});
+            return res.status(200).send({ token, user: _.omit(user.toObject(), ['password', '__v'])});
         }
     })
 }
 
 function me(req, res) {
-    User.findById(req.userId).then(user => res.json(_.omit(user.toObject(), 'password')));
+    User.findById(req.userId).then(user => res.json(_.omit(user.toObject(), ['password', '__v'])));
+}
+
+function updateUser(req, res) {
+    const userUpdate = req.body;
+    
+    if (userUpdate.password) {
+        userUpdate.password = bcrypt.hashSync(userUpdate.password, 8);
+    }
+
+    if (req.file) {
+        userUpdate.avatarUrl = '/profile/avatars/' + req.file.filename;
+    }
+
+    User.findByIdAndUpdate(req.userId, userUpdate).then(user => {
+        res.status(200).json(_.omit(user.toObject(), ['password', '__v']));
+    });
 }
 
 module.exports = {
     register,
     login,
+    updateUser,
     me
 }

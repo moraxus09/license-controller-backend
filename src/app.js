@@ -11,6 +11,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use('/profile-avatars', express.static('public/profile-avatars'));
+
 app.use('/auth', authRouter);
 app.use('/products', productsRouter);
 app.use('/admin', adminRouter);
