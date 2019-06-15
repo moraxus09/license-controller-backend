@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/profile-avatars', express.static('public/profile-avatars'));
+app.use('/product-documents', express.static('public/product-documents'));
 
 app.use('/auth', authRouter);
 app.use('/products', productsRouter);

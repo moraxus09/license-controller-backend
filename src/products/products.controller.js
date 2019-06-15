@@ -21,6 +21,12 @@ function deleteProduct(req, res) {
 }
 
 function updateProduct(req, res) {
+    if (req.files) {
+        req.body.documents = req.files.map(file => {
+            return `/product-documents/${req.params.id}/${file.filename}`;
+        });
+    }
+
     Product.updateOne({ _id: req.params.id }, req.body)
         .then(result => {
             result.n ? res.status(204).send() : res.status(500).send();
