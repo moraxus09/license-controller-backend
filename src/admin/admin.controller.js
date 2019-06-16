@@ -24,6 +24,10 @@ function updateProduct(req, res) {
         }, 1000 * 30);
     }
 
+    if (req.body.status === productStatuses.waitingPayment) {
+        req.body.price = req.body.links.length * 100 + '$';
+    }
+
     Product.findByIdAndUpdate(req.params.id, req.body).then(result => {
         res.status(204).send();
     });

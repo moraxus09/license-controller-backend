@@ -8,7 +8,6 @@ function getProducts(req, res) {
         .then(products => {
             if (req.query.status) {
                 const neededStatuses = req.query.status.split(',');
-                console.log(neededStatuses);
                 products = products.filter(p => neededStatuses.includes(p.status));
             }
             res.status(200).json(products);

@@ -17,7 +17,8 @@ const productSchema = mongoose.Schema({
     status: { required: true, type: String, default: productStatuses.pending },
     keywords: { required: false, type: Array },
     links: { required: false, type: Array },
-    documents: { required: false, type: Array }
+    documents: { required: false, type: Array },
+    price: { required: false, type: String }
 });
 const Product = mongoose.model('Product', productSchema);
 
