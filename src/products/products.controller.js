@@ -5,9 +5,16 @@ const _ = require('lodash');
 function getProducts(req, res) {
     Product.find({ ownerId: req.userId })
         .select('-ownerId')
-        .then(products => res.status(200).json(products));
+        .then(products => {
+            if (req.query.status) {
+                const neededStatuses = req.query.status.split(',');
+                console.log(neededStatuses);
+                products = products.filter(p => neededStatuses.includes(p.status));
+            }
+            res.status(200).json(products);
+        });
 }
-
+ 
 function createProduct(req, res) {
     Product.create({ ownerId: req.userId, status: productStatuses.pending, ...req.body })
         .then(product => res.status(200).json(_.omit(product.toObject(), 'ownerId')));
