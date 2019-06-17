@@ -7,29 +7,24 @@ function getProducts(req, res) {
 }
 
 function updateProduct(req, res) {
-    if (req.body.status === productStatuses.scriptWorking) {
-        setTimeout(() => {
-            Product.findByIdAndUpdate(req.params.id, {
-                status: productStatuses.waitingScriptReview,
-                links: [
-                    'https://kekister.com',
-                    'https://kekister-jhons.ru',
-                    'https://kekister-jhoanna.com',
-                    'https://kekislav.uk',
-                    'https://mr-kek.com',
-                    'https://kekenpower228.com',
-                    'https://kekerton.gg'
-                ]
-            });
-        }, 1000 * 30);
-    }
 
-    if (req.body.status === productStatuses.waitingPayment) {
+    if (req.body.status === productStatuses.scriptWorking) {
+        req.body.status = productStatuses.waitingScriptReview;
+        req.body.links = [
+            'https://kekister.com',
+            'https://kekister-jhons.ru',
+            'https://kekister-jhoanna.com',
+            'https://kekislav.uk',
+            'https://mr-kek.com',
+            'https://kekenpower228.com',
+            'https://kekerton.gg'
+        ]
+    } else if (req.body.status === productStatuses.waitingPayment) {
         req.body.price = req.body.links.length * 100 + '$';
     }
 
     Product.findByIdAndUpdate(req.params.id, req.body).then(result => {
-        res.status(204).send();
+        res.status(200).json(req.body);
     });
 }
 

@@ -29,7 +29,7 @@ function deleteProduct(req, res) {
 function updateProduct(req, res) {
     if (req.files) {
         req.body.documents = req.files.map(file => {
-            return `/product-documents/${req.params.id}/${file.filename}`;
+            return `${req.protocol}://${req.host}/product-documents/${req.params.id}/${file.filename}`;
         });
     }
 

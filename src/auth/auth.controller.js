@@ -35,7 +35,11 @@ function login(req, res) {
 }
 
 function me(req, res) {
-    User.findById(req.userId).then(user => res.json(_.omit(user.toObject(), ['password', '__v'])));
+    User.findById(req.userId).then(user => {
+        user = user.toObject();
+        user.accountPlus = user.address && user.phone && user.agree
+        res.json(_.omit(user, ['password', '__v']));
+    });
 }
 
 function updateUser(req, res) {
@@ -46,8 +50,7 @@ function updateUser(req, res) {
     }
 
     if (req.file) {
-        console.log(req.file);
-        userUpdate.avatarUrl = '/profile-avatars/' + req.file.filename;
+        userUpdate.avatarUrl = `${req.protocol}://${req.host}/profile-avatars/${req.file.filename}`;
     }
 
     User.findByIdAndUpdate(req.userId, userUpdate).then(user => {

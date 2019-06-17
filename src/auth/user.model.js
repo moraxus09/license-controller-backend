@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     avatarUrl: { required: false, type: String },
     address: { required: false, type: String },
     phone: { required: false, type: String },
-    agree: { required: false, type: Boolean }
+    agree: { required: false, type: Boolean },
 });
 userSchema.plugin(uniqueValidator);
 const User = mongoose.model('User', userSchema);
