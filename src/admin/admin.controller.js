@@ -5,7 +5,13 @@ const productStatuses = require('../products/product.model').productStatuses;
 const messageSenders = require('../products/message.model').senders;
 
 function getProducts(req, res) {
-    Product.find().then(products => res.json(products));
+    Product.find().then(products => {
+        if (req.query.status) {
+            const neededStatuses = req.query.status.split(',');
+            products = products.filter(p => neededStatuses.includes(p.status));
+        }
+        res.status(200).json(products);
+    });
 }
 
 function updateProduct(req, res) {
