@@ -35,7 +35,7 @@ function updateProduct(req, res) {
 
     Product.updateOne({ _id: req.params.id }, req.body)
         .then(result => {
-            result.n ? res.status(204).send() : res.status(500).send();
+            result.n ? res.status(200).json(req.body) : res.status(500).send();
         });
 }
 
