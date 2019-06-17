@@ -46,7 +46,8 @@ function updateUser(req, res) {
     }
 
     if (req.file) {
-        userUpdate.avatarUrl = '/profile/avatars/' + req.file.filename;
+        console.log(req.file);
+        userUpdate.avatarUrl = '/profile-avatars/' + req.file.filename;
     }
 
     User.findByIdAndUpdate(req.userId, userUpdate).then(user => {
