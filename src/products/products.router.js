@@ -3,6 +3,7 @@ const multer = require('multer');
 const authCheck = require('../middlewares/auth');
 const productsCtrl = require('./products.controller');
 const documentsStorage = require('../storages/product-documents');
+const Message = require('./message.model').Message;
 
 router.get('/', authCheck, productsCtrl.getProducts);
 router.post('/', authCheck, productsCtrl.createProduct);
@@ -15,7 +16,11 @@ router.post('/test', (req, res) => {
 })
 
 function callback(res) {
-    console.log(res);
+    const msg = {
+        text: JSON.stringify(res),
+        productId: 'dsadsa',
+        sender: 'USER'
+    }
 }
 
 module.exports = router;
