@@ -54,7 +54,7 @@ function updateUser(req, res) {
     }
 
     User.findByIdAndUpdate(req.userId, userUpdate).then(user => {
-        res.status(200).json(_.omit(userUpdate, 'avatar'));
+        res.status(200).json(_.omit(userUpdate, ['avatar', 'password']));
     });
 }
 

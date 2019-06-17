@@ -1,5 +1,7 @@
 const Product = require('./product.model').Product;
+const Message = require('./message.model').Message;
 const productStatuses = require('./product.model').productStatuses;
+const messageSenders = require('./message.model').senders;
 const _ = require('lodash');
 
 function getProducts(req, res) {
@@ -39,9 +41,31 @@ function updateProduct(req, res) {
         });
 }
 
+function getMessages(req, res) {
+    Message.find({ productId: req.params.id }).then(messages => {
+        res.status(200).json(messages.map(msg => {
+            return { sender: msg.sender, text: msg.text };
+        }));
+    })
+}
+
+function sendMessage(req, res) {
+    const message = {
+        productId: req.params.id,
+        sender: messageSenders.user,
+        text: req.body.text 
+    }
+
+    Message.create(message).then(() => {
+        res.status(204).send();
+    })
+}
+
 module.exports = {
     getProducts,
     createProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    getMessages,
+    sendMessage,
 }
