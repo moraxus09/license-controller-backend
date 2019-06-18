@@ -24,7 +24,6 @@ function updateProduct(req, res) {
             'https://kekister-jhoanna.com',
             'https://kekislav.uk',
             'https://mr-kek.com',
-            'https://kekenpower228.com',
             'https://kekerton.gg'
         ]
     } else if (req.body.status === productStatuses.waitingPayment) {
