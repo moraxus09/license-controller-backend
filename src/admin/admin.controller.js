@@ -1,3 +1,5 @@
+const axios = require('axios');
+const html = require('node-html-parser');
 const config = require('../app.config');
 const Product = require('../products/product.model').Product;
 const Message = require('../products/message.model').Message;
@@ -18,21 +20,44 @@ function updateProduct(req, res) {
 
     if (req.body.status === productStatuses.scriptWorking) {
         req.body.status = productStatuses.waitingScriptReview;
-        req.body.links = [
-            'https://kekister.com',
-            'https://kekister-jhons.ru',
-            'https://kekister-jhoanna.com',
-            'https://kekislav.uk',
-            'https://mr-kek.com',
-            'https://kekerton.gg'
-        ]
-    } else if (req.body.status === productStatuses.waitingPayment) {
-        req.body.price = req.body.links.length * 100 + '$';
-    }
+        Promise.all(req.body.keywords.map(keyword => {
+            const encoded = encodeURIComponent(keyword);
+            return axios.get(`https://search.yahoo.com/search?p=${encoded}`)
+        })).then(results => {
+            const allLinks = [];
+            results.forEach(searchRes => {
+                const root = html.parse(searchRes.data);
+                let links = root.querySelectorAll('.ac-algo').map(link => link.rawAttrs);
+                links = links.map(link => {
+                    const start = link.indexOf('href="') + 6;
+                    let end;
+                    for (var i = start; i < link.length; i++) {
+                        if (link[i] === '"') {
+                            end = i;
+                            break;
+                        }
+                    }
 
-    Product.findByIdAndUpdate(req.params.id, req.body).then(result => {
-        res.status(200).json(req.body);
-    });
+                    return link.substring(start, end);
+                });
+
+                allLinks.push(...links);  
+                req.body.links = allLinks;
+                Product.findByIdAndUpdate(req.params.id, req.body).then(() => {
+                    res.status(200).json(req.body);
+                });
+            });
+        });
+    } else {
+
+        if (req.body.status === productStatuses.waitingPayment) {
+            req.body.price = req.body.links.length * 100 + '$';
+        }
+    
+        Product.findByIdAndUpdate(req.params.id, req.body).then(result => {
+            res.status(200).json(req.body);
+        });
+    }
 }
 
 function getMessages(req, res) {

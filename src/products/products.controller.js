@@ -5,9 +5,11 @@ const messageSenders = require('./message.model').senders;
 const _ = require('lodash');
 
 function getProducts(req, res) {
+    console.log(req.userId)
     Product.find({ ownerId: req.userId })
         .select('-ownerId')
         .then(products => {
+            console.log(products);
             if (req.query.status) {
                 const neededStatuses = req.query.status.split(',');
                 products = products.filter(p => neededStatuses.includes(p.status));
@@ -17,6 +19,7 @@ function getProducts(req, res) {
 }
  
 function createProduct(req, res) {
+    console.log(req.userId);
     Product.create({ ownerId: req.userId, status: productStatuses.pending, ...req.body })
         .then(product => res.status(200).json(_.omit(product.toObject(), 'ownerId')));
 }
