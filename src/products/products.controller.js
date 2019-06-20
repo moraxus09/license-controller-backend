@@ -3,6 +3,7 @@ const Message = require('./message.model').Message;
 const productStatuses = require('./product.model').productStatuses;
 const messageSenders = require('./message.model').senders;
 const _ = require('lodash');
+const mailer = require('../mailer/mailer');
 
 function getProducts(req, res) {
     console.log(req.userId)
@@ -21,21 +22,29 @@ function getProducts(req, res) {
 function createProduct(req, res) {
     console.log(req.userId);
     Product.create({ ownerId: req.userId, status: productStatuses.pending, ...req.body })
-        .then(product => res.status(200).json(_.omit(product.toObject(), 'ownerId')));
+        .then(product => {
+            res.status(200).json(_.omit(product.toObject(), 'ownerId'));
+            mailer.sendProductCreated(req.userEmail);
+        });
 }
 
 function deleteProduct(req, res) {
     Product.deleteOne({ _id: req.params.id })
         .then(result => {
             result.n ? res.status(204).send() : res.status(500).send();
-        });
+        }); 
 }
 
 function updateProduct(req, res) {
+
     if (req.files) {
         req.body.documents = req.files.map(file => {
             return `${req.protocol}://${req.host}/product-documents/${req.params.id}/${file.filename}`;
         });
+    }
+
+    if (req.body.status === productStatuses.payed) {
+        mailer.sendProductPayed(req.userEmail);
     }
 
     Product.updateOne({ _id: req.params.id }, req.body)

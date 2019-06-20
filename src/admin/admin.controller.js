@@ -3,8 +3,10 @@ const html = require('node-html-parser');
 const config = require('../app.config');
 const Product = require('../products/product.model').Product;
 const Message = require('../products/message.model').Message;
+const User = require('../auth/user.model');
 const productStatuses = require('../products/product.model').productStatuses;
 const messageSenders = require('../products/message.model').senders;
+const mailer = require('../mailer/mailer');
 
 function getProducts(req, res) {
     Product.find().then(products => {
@@ -51,7 +53,13 @@ function updateProduct(req, res) {
     } else {
 
         if (req.body.status === productStatuses.waitingPayment) {
-            req.body.price = req.body.links.length * 100 + '$';
+            User.findById(req.body.ownerId).then(user => {
+                mailer.sendProductReviewed(user.email);
+            });
+        } else if (req.body.status === productStatuses.rejected) {
+            User.findById(req.body.ownerId).then(user => {
+                mailer.sendProductRejected(user.email);
+            });
         }
     
         Product.findByIdAndUpdate(req.params.id, req.body).then(result => {

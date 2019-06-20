@@ -13,6 +13,7 @@ module.exports = function authCheck(req, res, next) {
             return res.sendStatus(401);
         }
         req.userId = decoded.id;
+        req.userEmail = decoded.email;
         next();
     });
 }

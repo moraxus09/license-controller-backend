@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const config = require('../app.config');
 const User = require('./user.model');
+const mailer = require('../mailer/mailer');
 
 function register(req, res) {
     const user = {
@@ -14,8 +15,9 @@ function register(req, res) {
         if (err) {
             return res.sendStatus(500);
         }
-        const token = jwt.sign({ id: user._id }, config.secret, { expiresIn: 86400 });
+        const token = jwt.sign({ id: user._id, email: user.email }, config.secret, { expiresIn: 86400 });
         res.status(200).send({token, user: _.omit(user.toObject(), ['password', 'isAdmin', '__v'])});
+        mailer.sendUserRegistered(user.email);
     });
 }
 
@@ -28,7 +30,7 @@ function login(req, res) {
         } else if (!bcrypt.compareSync(req.body.password, user.password)) {
             return res.sendStatus(422);
         } else {
-            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, config.secret, { expiresIn: 86400 });
+            const token = jwt.sign({ id: user._id, email: user.email, isAdmin: user.isAdmin }, config.secret, { expiresIn: 86400 });
             return res.status(200).send({ token, user: _.omit(user.toObject(), ['password', '__v'])});
         }
     })
