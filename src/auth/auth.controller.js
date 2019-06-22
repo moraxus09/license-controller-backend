@@ -46,6 +46,12 @@ function me(req, res) {
 
 function updateUser(req, res) {
     const userUpdate = req.body;
+
+    for (const key in userUpdate) {
+        if (!userUpdate[key]) {
+            delete userUpdate[key];
+        }
+    }
     
     if (userUpdate.password) {
         userUpdate.password = bcrypt.hashSync(userUpdate.password, 8);
