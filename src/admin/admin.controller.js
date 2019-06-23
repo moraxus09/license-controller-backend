@@ -28,6 +28,7 @@ function updateProduct(req, res) {
         })).then(results => {
             const linksCount = req.body.linksCount || 5;
             const allLinks = [];
+            req.body.price = `${results.length}$`;
             results.forEach(searchRes => {
                 const root = html.parse(searchRes.data);
                 let links = root.querySelectorAll('.ac-algo').map(link => link.rawAttrs);
