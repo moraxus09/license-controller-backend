@@ -44,6 +44,11 @@ function updateProduct(req, res) {
     }
 
     if (req.body.status === productStatuses.payed) {
+        Message.create({
+            productId: req.params.id,
+            sender: messageSenders.admin,
+            text: 'Оплата вашого продутку пройшла успішно, подальша робота передана виконавцю, ви можете задати будь-які питання які вас цікавлять в цьому чаті.'
+        })ж
         mailer.sendProductPayed(req.userEmail);
     }
 
