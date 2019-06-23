@@ -26,6 +26,7 @@ function updateProduct(req, res) {
             const encoded = encodeURIComponent(keyword);
             return axios.get(`https://search.yahoo.com/search?p=${encoded}`)
         })).then(results => {
+            const linksCount = req.body.linksCount || 5;
             const allLinks = [];
             results.forEach(searchRes => {
                 const root = html.parse(searchRes.data);
@@ -43,7 +44,7 @@ function updateProduct(req, res) {
                     return link.substring(start, end);
                 });
 
-                allLinks.push(...links);  
+                allLinks.push(...links.slice(0, linksCount));  
                 req.body.links = allLinks;
                 Product.findByIdAndUpdate(req.params.id, req.body).then(() => {
                     res.status(200).json(req.body);

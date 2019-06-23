@@ -1,22 +1,22 @@
 module.exports = {
     userRegistered: {
-        title: 'Welcome to License Controller!',
-        text: 'We\'re glad that your joined our system. Hope that our service help you to protect your products\' rules!'
+        title: 'Ласкаво просимо',
+        text: 'Ми раді, що ви приєдналися до нашої системи. Сподіваємося що нас сервіс допоможе вам в захисті ваших інфопродуктів!'
     },
     productCreated: {
-        title: 'Your product was successfuly created!',
-        text: 'Your product was successfuly created and waiting for administrator reviewing, after review you will recieve notification on your email.'
+        title: 'Ваш продукт було успішно створено!',
+        text: 'Ваш продукт було успішно створено і зараз він очікує на перевірку адміністратором, після перевірки ви отримаєте лист на пошту.'
     },
     productRejected: {
-        title: 'Your product was rejected',
-        text: 'Your product was rejected by administrator because of incorrect information sent.'
+        title: 'Ваш продукт не пройшов перевірку',
+        text: 'Ваш продукт було відмінено адміністратором через введення некоректної інформації.'
     },
     productReviewed: {
-        title: 'Your product was reviewed!',
-        text: 'Administrator reviewed your product and has results for you! Check our site to see details.'
+        title: 'Адміністратор переглянув ваш продукт!',
+        text: 'Адміністратор перевірив ваш продукт, ви можете переглянути результати та перейти до наступного кроку на сайті.'
     },
     productPayed: {
-        title: 'Your pay is successful',
-        text: 'Your pay is successful, thank you for using our system. Now we will work on your request and will inform you on email. Also now you can chat administrator about your product and current work status!'
+        title: 'Оплата вашого продукту пройшла успішно',
+        text: 'Оплата вашого продукту пройшла успішно, дякуємо за те що користуєтесь нашою системою. Надалі ми будемо працювати над вашим продуктом і інформувати вас по мірі процесу. Ви можете задати будь-яке питання адміністратуру у вкладці оплачених продуктів на нашому сайті.'
     }
 };
